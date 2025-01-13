@@ -6,7 +6,7 @@ import API from "../API";
 export default function SelectGroup (){
     const [loading, setLoading] = useState(true)
     const [groups, setGroups] = useState([])
-    const [selectedGroups, setSelectedGroups] = useState([])
+    const [selectedGroups, setSelectedGroups] = useState<{ id: string; name: string; }[]>([])
     
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -14,8 +14,12 @@ export default function SelectGroup (){
         API.get('auth/callback?code=' + code)
         .then((response) =>
             {
-                localStorage.setItem(response.data.access_token, 'access_token')
-                API.get('get-groups').then((response)=>{
+                localStorage.setItem('access_token', response.data.access_token);
+                API.get('get-groups', {
+                    headers: {
+                        Authorization: `${localStorage.getItem('access_token')}`,
+                    },
+                }).then((response)=>{
                     setGroups(response.data.groups)
                     setLoading(false)
                 })
@@ -47,7 +51,7 @@ export default function SelectGroup (){
                 <div className="">
                     {
                         groups.map((gr:{id:string, name:string})=>(
-                            <p key={gr.id}>
+                            <p key={gr.id} onClick={()=>setSelectedGroups([gr])}>
                                 {
                                     gr.name
                                 }

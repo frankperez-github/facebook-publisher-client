@@ -5,6 +5,11 @@ import API from "./API";
 export default function Home() {
 
   const handleLogIn = async () =>{
+    const FACEBOOK_APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
+    const REDIRECT_URI = `${window.origin}/select-group`;
+    
+    const facebookAuthUrl = `https://www.facebook.com/v12.0/dialog/oauth?client_id=${FACEBOOK_APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+    window.location.href = facebookAuthUrl
     API.get('auth/login/')
   }
 

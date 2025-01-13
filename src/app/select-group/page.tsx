@@ -8,9 +8,9 @@ export default function SelectGroup (){
     const [groups, setGroups] = useState([])
     const [selectedGroups, setSelectedGroups] = useState<{ id: string; name: string; }[]>([])
     
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
     useEffect(()=>{
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
         API.get('auth/callback?code=' + code)
         .then((response) =>
             {
